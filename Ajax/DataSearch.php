@@ -19,7 +19,7 @@ if (!empty($_POST["variablu"]) )
 	That is one of the main reasons that we must ALWAYS use prepared statements
 	- The same as above statement applies for Eloquent as well
 	- For direct queries (neither eloquent nor prepared statements), if our string includes ' quotes, these in string quotes must be escaped
-	- 
+	- To sum up, ALWAYS USE PREPARED STATEMENTS while coding!
 	*/
 	
 	
