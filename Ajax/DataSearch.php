@@ -4,8 +4,16 @@ if (!empty($_POST["variablu"]) )
 {
 	
 	$x = $_POST["variablu"];
-	$x = str_replace("%","",$x);
-	$x = str_replace("_","",$x);
+	$x = str_replace("%","\%",$x); //best practice if we want to search by percent in Sql LIKE operator we must escape the string character
+	//$x = str_replace("%","",$x); //we can also remove the character
+
+	$x = str_replace("_","\_",$x); //best practice if we want to search by _ in Sql LIKE operator we must escape the string character
+
+	/* 
+	In case our string contains ' quotes, if we use prepared statements(bindValue or bindParam) , the single quiotes or automatically escaped
+	This happens because the main reason prepeared statements (bindValue & bindParam) exist are to avoid SQL injection so they are automatically escaped
+	That is one of the main reasons that we must ALWAYS use prepared statements
+	*/
 	
 	$x2 = $x;
 	
@@ -26,7 +34,7 @@ if (!empty($_POST["variablu"]) )
 		if ($CONNPDO != null && strlen($x2) > 0) 
 		{
 			$starttime = microtime(true);
-			$x2 = $x2 . "%";
+			$x2 = "%". $x2 . "%";
 			$getdata_PRST = $CONNPDO->prepare("SELECT word FROM vocabulary WHERE word LIKE :var LIMIT 5");
 			//$getdata_PRST->bindValue(":var", $x2 . "%");
 			$getdata_PRST->bindParam(':var', $x2);
@@ -36,19 +44,20 @@ if (!empty($_POST["variablu"]) )
 			while ($getdata_RSLT = $getdata_PRST->fetch(PDO::FETCH_ASSOC, PDO::FETCH_ORI_NEXT)) 
 			{
 				$z = $getdata_RSLT["word"];
-				$response .= $z . ",";
+				$response .= $z . "<br>";
 			}
 			$time_elapsed_ms = (microtime(true) - $starttime)*1000;
-		 echo $response . " # " . $time_elapsed_ms;	
+		 echo $response . " <br># " . $time_elapsed_ms;	
 	
 	
 	    }
 		else
 		{
-		 echo "No PDO CONNECTION";
+		 echo "No PDO CONNECTION!!";
 	    }
  }
 
+ 
 	
 	
 ?>	
