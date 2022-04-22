@@ -8,12 +8,22 @@ if (!empty($_POST["variablu"]) )
 	//$x = str_replace("%","",$x); //we can also remove the character
 
 	$x = str_replace("_","\_",$x); //best practice if we want to search by _ in Sql LIKE operator we must escape the string character
+	
+	/*Both above cases apply for LIKE in both eloquent laravel and unprepared statements as well*/
+	/*In all other cases of not LIKE operation, both % and _ can be used normally as expected without escaping them*/
 
 	/* 
-	In case our string contains ' quotes, if we use prepared statements(bindValue or bindParam) , the single quiotes or automatically escaped
+	General Important Note for '' quotes:
+	-In case our string contains ' quotes, if we use prepared statements(bindValue or bindParam) , the single quotes or automatically escaped
 	This happens because the main reason prepeared statements (bindValue & bindParam) exist are to avoid SQL injection so they are automatically escaped
 	That is one of the main reasons that we must ALWAYS use prepared statements
+	- The same as above statement applies for Eloquent as well
+	- For direct queries (neither eloquent nor prepared statements), if our string includes ' quotes, these in string quotes must be escaped
+	- 
 	*/
+	
+	
+	
 	
 	$x2 = $x;
 	
